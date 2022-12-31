@@ -175,8 +175,80 @@ for(nv in num.var){
 
 # Remove variables that are not gonna be used
 rm(nv, i, p, w, col_nam, num_col,num_row, model, g, 
-   ws.legend, ws.observ)
+   ws.legend, ws.observ, dt2)
+rm(dt.beta, dt.sonchus, num.var)
+
+### ANOVA with p-values to decide significant groups in W6 ---------- 
+
+w <- "W6"
+
+parameters <- c("Week", 'Date','Species', 'PlantId', 'Use',
+                'Treatment',"Leaf_number","Chlorophyll_content",
+                "Root_water_content")
+
+dt2 <- dt1 %>% filter(Week == w) %>% select(all_of(parameters))
+
+dt.beta <- dt2 %>% filter(Species == "Beta vulgaris")
+
+dt.sonchus <- dt2 %>% filter(Species == "Sonchus oleraceus")
+
+dt3 <- bind_rows(dt.beta, dt.sonchus)
+
+rm(dt.beta, dt.sonchus)
+
+### ANOVA with p-values to decide significant variables ---------- 
+
+# Creating the table to keep the information 
+num.var <- c("Leaf_number","Chlorophyll_content", "Root_water_content")
+species <- c("Beta vulgaris", "Sonchus oleraceus")
+col_nam <- c("Species","Variables", "P_value", "Significant")
+num_col <- length(col_nam)
+num_row <- length(species)  * length(num.var)
+anova_table <- as.data.frame(matrix(nrow = num_row, ncol = num_col))
+names(anova_table) <- col_nam
+
+# Variables for the loop
+sp <- species[1]
+nv <- num.var[1]
+i <- 1
 
 
+for(sp in species){
+  for(nv in num.var){
+    # Data filtered by species
+    dt4 <- dt3 %>% filter(Species == sp) %>% select(nv,"Treatment")
+    dt4 <- na.omit(dt4)
+    
+    # Anova test
+    
+    model <- aov(dt4[[1]] ~ dt4$Treatment, data = dt4)
+    
+    # Summary
+    p <- summary(model)[[1]][["Pr(>F)"]][1]
+    
+    
+    # Allocating the values in the table
+    
+    if (p < 0.05){
+      anova_table$Species[i] <- sp
+      anova_table$Variables[i] <- nv
+      anova_table$P_value[i] <- p
+      anova_table$Significant[i] <- "Yes"
+    } else {
+      anova_table$Species[i] <- sp
+      anova_table$Variables[i] <- nv
+      anova_table$P_value[i] <- p
+      anova_table$Significant[i] <- "No"
+    }
+    
+    i <- i + 1
+    rm(dt4)
+  }
+}
 
+#anova_table <- anova_table %>% filter(Significant == "Yes")
+
+# Remove variables that are not gonna be used
+rm(sp, nv, i, p, w, parameters, col_nam, num_col,num_row, num.var,
+   model, weeks, species)
 
