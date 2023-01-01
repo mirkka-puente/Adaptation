@@ -175,7 +175,7 @@ for(nv in num.var){
 
 # Remove variables that are not gonna be used
 rm(nv, i, p, w, col_nam, num_col,num_row, model, g, 
-   ws.legend, ws.observ, dt2)
+   ws.legend, ws.observ)
 rm(dt.beta, dt.sonchus, num.var)
 
 ### ANOVA with p-values to decide significant groups in W6 ---------- 
