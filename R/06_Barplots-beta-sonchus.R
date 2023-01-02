@@ -33,7 +33,8 @@ parameters <- c("Week", 'Date','Species', 'PlantId', 'Use', 'Treatment',
                 "Leaf_number","Chlorophyll_content", "Root_water_content", 
                 "Roots_fresh_weight", "Roots_dry_weight")
 
-num.var <- c("Leaf_number","Chlorophyll_content", "Root_water_content")
+num.var <- c("Leaf_number","Chlorophyll_content", "Root_water_content",
+             "Roots_fresh_weight", "Roots_dry_weight")
 
 
 w <- "W6"

@@ -32,9 +32,11 @@ dt1 <- mutate(dt1,
 ### Neat data to work on
 
 parameters <- c("Week", 'Date','Species', 'PlantId', 'Use', 'Treatment',
-                "Leaf_number","Chlorophyll_content", "Root_water_content")
+                "Leaf_number","Chlorophyll_content", "Root_water_content", 
+                "Roots_fresh_weight", "Roots_dry_weight")
 
-num.var <- c("Leaf_number","Chlorophyll_content", "Root_water_content")
+num.var <- num.var <- c("Leaf_number","Chlorophyll_content", "Root_water_content",
+                        "Roots_fresh_weight", "Roots_dry_weight")
 
 
 w <- "W6"
@@ -76,7 +78,7 @@ i <- 1
 for(sp in species){
   for(nv in num.var){
     # Data filtered by species
-    dt4 <- dt3 %>% filter(Species == sp) %>% select(nv,"Treatment")
+    dt4 <- dt3 %>% filter(Species == sp) %>% select(one_of(nv,"Treatment"))
     
     # Bonferroni test
     
