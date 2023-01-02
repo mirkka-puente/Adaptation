@@ -30,14 +30,15 @@ dt1 <- mutate(dt1,
 ### Neat data to work on ---------
 
 parameters <- c("Week", 'Date','Species', 'PlantId', 'Use', 'Treatment',
-                "Leaf_number","Chlorophyll_content", "Root_water_content")
+                "Leaf_number","Chlorophyll_content", "Root_water_content", 
+                "Roots_fresh_weight", "Roots_dry_weight")
 
 num.var <- c("Leaf_number","Chlorophyll_content", "Root_water_content")
 
 
 w <- "W6"
 
-dt2 <- dt1 %>% filter(Week == w) %>% select(all_of(parameters))
+dt2 <- dt1 %>% filter(Week == w) %>% select(one_of(parameters))
 
 dt.beta <- dt2 %>% filter(Species == "Beta vulgaris")
 
@@ -133,5 +134,41 @@ plot3+labs(title="Average Root water content per species in week 6",
 
 rm(dt2, p.rwc)
 
-ggarrange(plot1, plot2, plot3, labels = c("A", "B", "C"), ncol = 2, nrow = 2)
+#### Summary of data for plot 4: Root fresh weight --------------
+dt2 <- data_summary(dt3, varname="Roots_fresh_weight", 
+                    groupnames=c("Species", "Treatment"))
+
+
+# Standard deviation of the mean as error bar
+plot4 <- ggplot(dt2, aes(x=Treatment, y=Roots_fresh_weight, fill=Species)) + 
+  geom_bar(stat="identity", position=position_dodge()) +
+  geom_errorbar(aes(ymin=Roots_fresh_weight-sd, 
+                    ymax=Roots_fresh_weight+sd), width=0.3,
+                position=position_dodge(0.9)) 
+
+# Finished bar plot
+plot4+labs(title="Average Root fresh weight per species in week 6", 
+           x="Treatments", y = "Root fresh weight (grams)")+
+  scale_fill_manual(values=c('plum3','skyblue'))
+
+rm(dt2)
+
+#### Summary of data for plot 5: Root dry weight --------------
+dt2 <- data_summary(dt3, varname="Roots_dry_weight", 
+                    groupnames=c("Species", "Treatment"))
+
+
+# Standard deviation of the mean as error bar
+plot5 <- ggplot(dt2, aes(x=Treatment, y=Roots_dry_weight, fill=Species)) + 
+  geom_bar(stat="identity", position=position_dodge()) +
+  geom_errorbar(aes(ymin=Roots_dry_weight-sd, 
+                    ymax=Roots_dry_weight+sd), width=0.3,
+                position=position_dodge(0.9))
+
+# Finished bar plot
+plot5+labs(title="Average Root dry weight per species in week 6", 
+           x="Treatments", y = "Root dry weight (grams)")+
+  scale_fill_manual(values=c('plum3','skyblue'))
+
+rm(dt2)
 
