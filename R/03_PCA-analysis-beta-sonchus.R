@@ -88,3 +88,4 @@ pca.table <- as.data.frame(round(cor(dt2, pn$scores), 3))
 
 ### Variables to work on 
 c('leaf number', "root_water_content", "chlorophyll_content")
+
