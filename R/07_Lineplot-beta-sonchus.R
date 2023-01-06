@@ -67,6 +67,7 @@ dt.beta <- bind_rows(d1, d2)
 rm(dt.beta1, dt.beta2, dt.beta3, dt.beta4, d1, d2)
 
 #### Sonchus oleraceus ------------------------------------------
+
 dt.sonchus0 <- dt2 %>% filter(Species == "Sonchus oleraceus")
 
 dt.sonchus1 <- dt.sonchus0 %>% filter(Week == "W3") %>% group_by(Treatment)%>%

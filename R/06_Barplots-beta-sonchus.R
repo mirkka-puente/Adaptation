@@ -135,10 +135,11 @@ plot3+labs(title="Average Root water content per species in week 6",
 
 rm(dt2, p.rwc)
 
+
+##########################################################
 #### Summary of data for plot 4: Root fresh weight --------------
 dt2 <- data_summary(dt3, varname="Roots_fresh_weight", 
                     groupnames=c("Species", "Treatment"))
-
 
 # Standard deviation of the mean as error bar
 plot4 <- ggplot(dt2, aes(x=Treatment, y=Roots_fresh_weight, fill=Species)) + 
